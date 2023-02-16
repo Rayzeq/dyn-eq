@@ -1,0 +1,15 @@
+[package]
+name = "dyn-eq"
+version = "0.1.0"
+authors = ["Zacharie Dubrulle <dubrullezacharie+rust@gmail.com>"]
+edition = "2021"
+description = "Test equality between trait objects"
+repository = "https://github.com/Rayzeq/dyn-eq"
+license = "MPL-2.0"
+keywords = ["dyn", "eq", "trait-object"]
+categories = ["rust-patterns", "no-std"]
+
+[badges]
+maintenance = { status = "passively-maintained" }
+
+[dependencies]
