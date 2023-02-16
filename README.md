@@ -1,11 +1,12 @@
 Test equality between trait objects
 ===================================
 
-[![github](https://img.shields.io/badge/github-rayzeq/dyn--eq-a?style=for-the-badge&logo=github)](https://github.com/Rayzeq/dyn-eq)
-[![crates.io](https://img.shields.io/crates/v/dyn-eq?style=for-the-badge&logo=rust)](https://crates.io/crates/dyn-eq)
-[![doc.rs](https://img.shields.io/badge/docs.rs-dyn--eq-a?style=for-the-badge&logo=docs.rs)](https://docs.rs/dyn-eq)
-![license](https://img.shields.io/crates/l/dyn-eq?style=for-the-badge)
-![passively-maintained](https://img.shields.io/badge/maintenance-passively--maintained-brightgreen?style=for-the-badge)
+[![github](https://img.shields.io/badge/github-rayzeq/dyn--eq-a?style=flat-square&logo=github)](https://github.com/Rayzeq/dyn-eq)
+[![crates.io](https://img.shields.io/crates/v/dyn-eq?style=flat-square&logo=rust)](https://crates.io/crates/dyn-eq)
+[![doc.rs](https://img.shields.io/badge/docs.rs-dyn--eq-a?style=flat-square&logo=docs.rs)](https://docs.rs/dyn-eq)
+![license](https://img.shields.io/crates/l/dyn-eq?style=flat-square)
+![build](https://img.shields.io/github/actions/workflow/status/Rayzeq/dyn-eq/rust.yml?style=flat-square)
+![passively-maintained](https://img.shields.io/badge/maintenance-passively--maintained-brightgreen?style=flat-square)
 
 This crate provides a `DynEq` trait that can be used in trait objects,
 which permit comparing trait objects. If the two objects are instances of
