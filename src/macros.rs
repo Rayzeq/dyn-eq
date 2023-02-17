@@ -111,35 +111,47 @@ macro_rules! __internal_eq_trait_object {
 			}
 		}
 
-		// Needed because of [this issue](https://github.com/rust-lang/rust/issues/31740)
-		#[cfg(feature = "alloc")]
-		impl<'eq, $($generics)*> ::core::cmp::PartialEq<&Self> for $crate::Box<dyn $($path)* + 'eq> where $($bound)* {
-			fn eq(&self, other: &&Self) -> bool {
-				self == *other
-			}
-		}
-		#[cfg(feature = "alloc")]
-		impl<'eq, $($generics)*> ::core::cmp::PartialEq<&Self> for $crate::Box<dyn $($path)* + ::core::marker::Send + 'eq> where $($bound)* {
-			fn eq(&self, other: &&Self) -> bool {
-				self == *other
-			}
-		}
-		#[cfg(feature = "alloc")]
-		impl<'eq, $($generics)*> ::core::cmp::PartialEq<&Self> for $crate::Box<dyn $($path)* + ::core::marker::Sync + 'eq> where $($bound)* {
-			fn eq(&self, other: &&Self) -> bool {
-				self == *other
-			}
-		}
-		#[cfg(feature = "alloc")]
-		impl<'eq, $($generics)*> ::core::cmp::PartialEq<&Self> for $crate::Box<dyn $($path)* + ::core::marker::Send + ::core::marker::Sync + 'eq> where $($bound)* {
-			fn eq(&self, other: &&Self) -> bool {
-				self == *other
-			}
-		}
+		$crate::__internal_eq_trait_object_alloc!(($($generics)*) ($($path)*) ($($bound)*));
 
 		impl<'eq, $($generics)*> ::core::cmp::Eq for (dyn $($path)* + 'eq) where $($bound)* {}
 		impl<'eq, $($generics)*> ::core::cmp::Eq for (dyn $($path)* + ::core::marker::Send + 'eq) where $($bound)* {}
 		impl<'eq, $($generics)*> ::core::cmp::Eq for (dyn $($path)* + ::core::marker::Sync + 'eq) where $($bound)* {}
 		impl<'eq, $($generics)*> ::core::cmp::Eq for (dyn $($path)* + ::core::marker::Send + ::core::marker::Sync + 'eq) where $($bound)* {}
 	};
+}
+
+/// The code to fix [this](https://github.com/rust-lang/rust/issues/31740) issue.
+#[doc(hidden)]
+#[macro_export]
+#[cfg(feature = "alloc")]
+macro_rules! __internal_eq_trait_object_alloc {
+	(($($generics:tt)*) ($($path:tt)*) ($($bound:tt)*)) => {
+		impl<'eq, $($generics)*> ::core::cmp::PartialEq<&Self> for $crate::Box<dyn $($path)* + 'eq> where $($bound)* {
+			fn eq(&self, other: &&Self) -> bool {
+				self == *other
+			}
+		}
+		impl<'eq, $($generics)*> ::core::cmp::PartialEq<&Self> for $crate::Box<dyn $($path)* + ::core::marker::Send + 'eq> where $($bound)* {
+			fn eq(&self, other: &&Self) -> bool {
+				self == *other
+			}
+		}
+		impl<'eq, $($generics)*> ::core::cmp::PartialEq<&Self> for $crate::Box<dyn $($path)* + ::core::marker::Sync + 'eq> where $($bound)* {
+			fn eq(&self, other: &&Self) -> bool {
+				self == *other
+			}
+		}
+		impl<'eq, $($generics)*> ::core::cmp::PartialEq<&Self> for $crate::Box<dyn $($path)* + ::core::marker::Send + ::core::marker::Sync + 'eq> where $($bound)* {
+			fn eq(&self, other: &&Self) -> bool {
+				self == *other
+			}
+		}
+	}
+}
+
+#[doc(hidden)]
+#[macro_export]
+#[cfg(not(feature = "alloc"))]
+macro_rules! __internal_eq_trait_object_alloc {
+	(($($generics:tt)*) ($($path:tt)*) ($($bound:tt)*)) => {};
 }
