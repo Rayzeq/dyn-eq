@@ -110,19 +110,20 @@ macro_rules! __internal_eq_trait_object {
 
 	// The impl.
 	(impl ($($generics:tt)*) ($($path:tt)*) ($($bound:tt)*)) => {
-		impl<'eq, $($generics)*> ::core::cmp::PartialEq for $crate::Box<dyn $($path)* + 'eq> where $($bound)* {
+		impl<'eq, $($generics)*> ::core::cmp::PartialEq for (dyn $($path)* + 'eq) where $($bound)* {
 			$crate::__internal_eq_trait_object!(func ($($path)*));
 		}
-		impl<'eq, $($generics)*> ::core::cmp::PartialEq for $crate::Box<dyn $($path)* + ::core::marker::Send + 'eq> where $($bound)* {
+		impl<'eq, $($generics)*> ::core::cmp::PartialEq for (dyn $($path)* + ::core::marker::Send + 'eq) where $($bound)* {
 			$crate::__internal_eq_trait_object!(func ($($path)*));
 		}
-		impl<'eq, $($generics)*> ::core::cmp::PartialEq for $crate::Box<dyn $($path)* + ::core::marker::Sync + 'eq> where $($bound)* {
+		impl<'eq, $($generics)*> ::core::cmp::PartialEq for (dyn $($path)* + ::core::marker::Sync + 'eq) where $($bound)* {
 			$crate::__internal_eq_trait_object!(func ($($path)*));
 		}
-		impl<'eq, $($generics)*> ::core::cmp::PartialEq for $crate::Box<dyn $($path)* + ::core::marker::Send + ::core::marker::Sync + 'eq> where $($bound)* {
+		impl<'eq, $($generics)*> ::core::cmp::PartialEq for (dyn $($path)* + ::core::marker::Send + ::core::marker::Sync + 'eq) where $($bound)* {
 			$crate::__internal_eq_trait_object!(func ($($path)*));
 		}
 
+		// Needed because of [this issue](https://github.com/rust-lang/rust/issues/31740)
 		impl<'eq, $($generics)*> ::core::cmp::PartialEq<&Self> for $crate::Box<dyn $($path)* + 'eq> where $($bound)* {
 			fn eq(&self, other: &&Self) -> bool {
 				self == *other
@@ -144,22 +145,17 @@ macro_rules! __internal_eq_trait_object {
 			}
 		}
 
-		impl<'eq, $($generics)*> ::core::cmp::Eq for $crate::Box<dyn $($path)* + 'eq> where $($bound)* {}
-		impl<'eq, $($generics)*> ::core::cmp::Eq for $crate::Box<dyn $($path)* + ::core::marker::Send + 'eq> where $($bound)* {}
-		impl<'eq, $($generics)*> ::core::cmp::Eq for $crate::Box<dyn $($path)* + ::core::marker::Sync + 'eq> where $($bound)* {}
-		impl<'eq, $($generics)*> ::core::cmp::Eq for $crate::Box<dyn $($path)* + ::core::marker::Send + ::core::marker::Sync + 'eq> where $($bound)* {}
+		impl<'eq, $($generics)*> ::core::cmp::Eq for (dyn $($path)* + 'eq) where $($bound)* {}
+		impl<'eq, $($generics)*> ::core::cmp::Eq for (dyn $($path)* + ::core::marker::Send + 'eq) where $($bound)* {}
+		impl<'eq, $($generics)*> ::core::cmp::Eq for (dyn $($path)* + ::core::marker::Sync + 'eq) where $($bound)* {}
+		impl<'eq, $($generics)*> ::core::cmp::Eq for (dyn $($path)* + ::core::marker::Send + ::core::marker::Sync + 'eq) where $($bound)* {}
 	};
 
 	// The implementation of the `eq` function.
 	(func ($($path:tt)*)) => {
 		fn eq(&self, other: &Self) -> bool {
 			if self.type_id() == other.type_id() {
-				let ref_to_other: &dyn $($path)* = &**other;
-				let pointer_to_other = ref_to_other as *const _ as *const ();
-
-				// Required, otherwise we would call `Box<dyn Trait>::dyn_eq(dyn Trait)` and that would segfault
-				let self_as_ref_to_dyn = &**self;
-				unsafe { self_as_ref_to_dyn.dyn_eq(pointer_to_other) }
+				unsafe { self.dyn_eq(other as *const _ as *const ()) }
 			} else {
 				false
 			}

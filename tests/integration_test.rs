@@ -26,50 +26,106 @@ struct B {
 }
 impl MyTrait for B {}
 
-#[test]
-fn a_and_a_same_value_equal() {
-	let a1: Box<dyn MyTrait> = Box::new(A { value: 5 });
-	let a2: Box<dyn MyTrait> = Box::new(A { value: 5 });
+mod with_box {
+	use super::*;
 
-	assert!(a1 == a2);
+	#[test]
+	fn a_and_a_same_value_equal() {
+		let a1: Box<dyn MyTrait> = Box::new(A { value: 5 });
+		let a2: Box<dyn MyTrait> = Box::new(A { value: 5 });
+
+		assert!(a1 == a2);
+	}
+
+	#[test]
+	fn a_and_a_different_value_not_equal() {
+		let a1: Box<dyn MyTrait> = Box::new(A { value: 5 });
+		let a2: Box<dyn MyTrait> = Box::new(A { value: 6 });
+
+		assert!(a1 != a2);
+	}
+
+	#[test]
+	fn b_and_b_same_value_equal() {
+		let b1: Box<dyn MyTrait> = Box::new(B { value: 5 });
+		let b2: Box<dyn MyTrait> = Box::new(B { value: 5 });
+
+		assert!(b1 == b2);
+	}
+
+	#[test]
+	fn b_and_b_different_value_not_equal() {
+		let b1: Box<dyn MyTrait> = Box::new(B { value: 5 });
+		let b2: Box<dyn MyTrait> = Box::new(B { value: 6 });
+
+		assert!(b1 != b2);
+	}
+
+	#[test]
+	fn a_and_b_same_value_not_equal() {
+		let a: Box<dyn MyTrait> = Box::new(A { value: 5 });
+		let b: Box<dyn MyTrait> = Box::new(B { value: 5 });
+
+		assert!(a != b);
+	}
+
+	#[test]
+	fn a_and_b_different_value_not_equal() {
+		let a: Box<dyn MyTrait> = Box::new(A { value: 5 });
+		let b: Box<dyn MyTrait> = Box::new(B { value: 6 });
+
+		assert!(a != b);
+	}
 }
 
-#[test]
-fn a_and_a_different_value_not_equal() {
-	let a1: Box<dyn MyTrait> = Box::new(A { value: 5 });
-	let a2: Box<dyn MyTrait> = Box::new(A { value: 6 });
+mod with_ref {
+	use super::*;
 
-	assert!(a1 != a2);
-}
+	#[test]
+	fn a_and_a_same_value_equal() {
+		let a1: &dyn MyTrait = &A { value: 5 };
+		let a2: &dyn MyTrait = &A { value: 5 };
 
-#[test]
-fn b_and_b_same_value_equal() {
-	let b1: Box<dyn MyTrait> = Box::new(B { value: 5 });
-	let b2: Box<dyn MyTrait> = Box::new(B { value: 5 });
+		assert!(a1 == a2);
+	}
 
-	assert!(b1 == b2);
-}
+	#[test]
+	fn a_and_a_different_value_not_equal() {
+		let a1: &dyn MyTrait = &A { value: 5 };
+		let a2: &dyn MyTrait = &A { value: 6 };
 
-#[test]
-fn b_and_b_different_value_not_equal() {
-	let b1: Box<dyn MyTrait> = Box::new(B { value: 5 });
-	let b2: Box<dyn MyTrait> = Box::new(B { value: 6 });
+		assert!(a1 != a2);
+	}
 
-	assert!(b1 != b2);
-}
+	#[test]
+	fn b_and_b_same_value_equal() {
+		let b1: &dyn MyTrait = &B { value: 5 };
+		let b2: &dyn MyTrait = &B { value: 5 };
 
-#[test]
-fn a_and_b_same_value_not_equal() {
-	let a: Box<dyn MyTrait> = Box::new(A { value: 5 });
-	let b: Box<dyn MyTrait> = Box::new(B { value: 5 });
+		assert!(b1 == b2);
+	}
 
-	assert!(a != b);
-}
+	#[test]
+	fn b_and_b_different_value_not_equal() {
+		let b1: &dyn MyTrait = &B { value: 5 };
+		let b2: &dyn MyTrait = &B { value: 6 };
 
-#[test]
-fn a_and_b_different_value_not_equal() {
-	let a: Box<dyn MyTrait> = Box::new(A { value: 5 });
-	let b: Box<dyn MyTrait> = Box::new(B { value: 6 });
+		assert!(b1 != b2);
+	}
 
-	assert!(a != b);
+	#[test]
+	fn a_and_b_same_value_not_equal() {
+		let a: &dyn MyTrait = &A { value: 5 };
+		let b: &dyn MyTrait = &B { value: 5 };
+
+		assert!(a != b);
+	}
+
+	#[test]
+	fn a_and_b_different_value_not_equal() {
+		let a: &dyn MyTrait = &A { value: 5 };
+		let b: &dyn MyTrait = &B { value: 6 };
+
+		assert!(a != b);
+	}
 }
