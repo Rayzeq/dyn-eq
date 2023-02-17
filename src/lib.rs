@@ -58,7 +58,9 @@
 //! // Even if the value is the same, the fact that it's a diffrent type means it's not equal
 //! assert!(a != c);
 //!
-//! // Now data structures containing Box<dyn MyTrait> can derive Eq.
+//! // Now data structures containing Box<dyn MyTrait> can derive Eq (only when `alloc`
+//! // feature is enabled).
+//! # #[cfg(feature = "alloc")]
 //! #[derive(PartialEq, Eq)]
 //! struct Container {
 //!     field: Box<dyn MyTrait>
