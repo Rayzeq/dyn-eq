@@ -14,10 +14,6 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        toolchain:
-          - stable
-          - beta
-          - nightly
         # /!\ won't test every combination with more than 2 features
         features:
           - "\"\""
@@ -26,8 +22,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Install toolchain
-        run: rustup update ${{ matrix.toolchain }} && rustup default ${{ matrix.toolchain }}
       - name: Install components
         run: rustup component add rustfmt && rustup component add clippy
 
