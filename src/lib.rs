@@ -14,6 +14,8 @@
 //! this feature removes the dependency on the [`alloc`] crate, but you won't be
 //! able to use [`DynEq`] for `Box<dyn Trait>`.
 //!
+//! [`alloc`]: https://doc.rust-lang.org/alloc/
+//!
 //! # Example
 //!
 //! ```
@@ -49,14 +51,14 @@ extern crate alloc;
 /// Re-export of [`alloc::boxed::Box`] for the macro.
 ///
 #[cfg(feature = "alloc")]
+#[doc(hidden)]
 pub use alloc::boxed::Box;
 use core::any::Any;
 
 mod macros;
 
-/// This trait is implemented by any type that implements [`PartialEq`] and [`Eq`].
+/// This trait is implemented by any type that implements [`Eq`].
 ///
-/// [`PartialEq`]: ::core::cmp::PartialEq
 /// [`Eq`]: ::core::cmp::PartialEq
 pub trait DynEq: Any + private::Sealed {
 	/// Compare if this object is equal to `other`, which a pointer to a struct of the same
@@ -70,7 +72,7 @@ pub trait DynEq: Any + private::Sealed {
 	unsafe fn dyn_eq(&self, other: *const ()) -> bool;
 }
 
-impl<T: PartialEq + Eq + 'static> DynEq for T {
+impl<T: Eq + 'static> DynEq for T {
 	unsafe fn dyn_eq(&self, other: *const ()) -> bool {
 		self == &*other.cast::<Self>()
 	}

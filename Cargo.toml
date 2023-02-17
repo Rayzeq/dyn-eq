@@ -7,7 +7,7 @@ description = "Test equality between trait objects"
 repository = "https://github.com/Rayzeq/dyn-eq"
 license = "MPL-2.0"
 keywords = ["dyn", "eq", "trait-object"]
-categories = ["rust-patterns", "no-std"]
+categories = ["rust-patterns", "no-std", "no-alloc"]
 
 [badges]
 maintenance = { status = "passively-maintained" }

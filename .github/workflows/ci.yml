@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  check_validity:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        toolchain:
+          - stable
+          - beta
+          - nightly
+        # /!\ won't test every combination with more than 2 features
+        features:
+          - "\"\""
+          - alloc
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - run: rustup update ${{ matrix.toolchain }} && rustup default ${{ matrix.toolchain }}
+
+      - name: Build
+        run: cargo build --no-default-features --features=${{ matrix.features }} --verbose
+
+      - name: Run tests
+        run: cargo test --no-default-features --features=${{ matrix.features }} --verbose
+
+      - name: Lint
+        run: |
+          cargo fmt -- --check
+          cargo clippy -- -D warnings
+
+      - name: Doc
+        run: RUSTDOCFLAGS="-D warnings" cargo doc --no-default-features --features=${{ matrix.features }}
