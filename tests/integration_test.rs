@@ -3,9 +3,10 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
+use core::fmt::Debug;
 use dyn_eq::DynEq;
 
-trait MyTrait: DynEq {}
+trait MyTrait: DynEq + Debug {}
 dyn_eq::eq_trait_object!(MyTrait);
 
 // This works
@@ -77,6 +78,15 @@ mod with_box {
 		let b: Box<dyn MyTrait> = Box::new(B { value: 6 });
 
 		assert!(a != b);
+	}
+
+	#[test]
+	fn comparaison_dont_move_box() {
+		let a: Box<dyn MyTrait> = Box::new(A { value: 5 });
+		let b: Box<dyn MyTrait> = Box::new(B { value: 6 });
+
+		assert!(!(a == b));
+		println!("{:?}", b);
 	}
 }
 
