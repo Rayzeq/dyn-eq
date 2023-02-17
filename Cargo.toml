@@ -1,6 +1,6 @@
 [package]
 name = "dyn-eq"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Zacharie Dubrulle <dubrullezacharie+rust@gmail.com>"]
 edition = "2021"
 description = "Test equality between trait objects"
