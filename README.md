@@ -4,8 +4,8 @@ Test equality between trait objects
 [![github](https://img.shields.io/badge/github-rayzeq/dyn--eq-a?style=flat-square&logo=github)](https://github.com/Rayzeq/dyn-eq)
 [![crates.io](https://img.shields.io/crates/v/dyn-eq?style=flat-square&logo=rust)](https://crates.io/crates/dyn-eq)
 [![doc.rs](https://img.shields.io/badge/docs.rs-dyn--eq-a?style=flat-square&logo=docs.rs)](https://docs.rs/dyn-eq)
-![license](https://img.shields.io/crates/l/dyn-eq?style=flat-square)
-![build](https://img.shields.io/github/actions/workflow/status/Rayzeq/dyn-eq/rust.yml?style=flat-square)
+[![license](https://img.shields.io/crates/l/dyn-eq?style=flat-square)](https://www.mozilla.org/en-US/MPL/2.0/)
+[![build](https://img.shields.io/github/actions/workflow/status/Rayzeq/dyn-eq/rust.yml?style=flat-square)](https://github.com/Rayzeq/dyn-eq/actions?query=branch%3Amain)
 ![passively-maintained](https://img.shields.io/badge/maintenance-passively--maintained-brightgreen?style=flat-square)
 
 This crate provides a `DynEq` trait that can be used in trait objects,
@@ -16,8 +16,8 @@ of the same struct, the struct's `Eq` will be used.
 ###### Todos
 
 Here's a list of things that could be done and could be nice to have, but I'll implement them only if someone ask:
-  [ ] Permit having `PartialEq` without `Eq` (implementation on `Box<dyn Trait>` will follow)
-  [ ] Implement this for `&dyn Trait` (permit no-alloc feature)
+  - [ ] Permit having `PartialEq` without `Eq` (implementation on `Box<dyn Trait>` will follow)
+  - [ ] Implement this for `&dyn Trait` (permit no-alloc feature)
 
 ## Example
 
