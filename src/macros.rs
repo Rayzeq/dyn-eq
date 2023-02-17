@@ -7,8 +7,6 @@
 //!
 //! Almost everything here has been taken from [dyn-clone] by David Tolnay.
 //!
-//! [`PartialEq`]: ::core::cmp::PartialEq
-//! [`Eq`]: ::core::cmp::Eq
 //! [dyn-clone]: https://github.com/dtolnay/dyn-clone
 
 /// Implement [`PartialEq`] and [`Eq`] for a trait object that has [`DynEq`] as a supertrait.
@@ -29,8 +27,6 @@
 /// dyn_eq::eq_trait_object!(<R> Difficult<R> where R: Read + 'static);
 /// ```
 ///
-/// [`PartialEq`]: ::core::cmp::PartialEq
-/// [`Eq`]: ::core::cmp::Eq
 /// [`DynEq`]: super::DynEq
 #[macro_export]
 macro_rules! eq_trait_object {
@@ -121,9 +117,9 @@ macro_rules! __internal_eq_trait_object {
 }
 
 /// The code to fix [this](https://github.com/rust-lang/rust/issues/31740) issue.
+#[cfg(feature = "alloc")]
 #[doc(hidden)]
 #[macro_export]
-#[cfg(feature = "alloc")]
 macro_rules! __internal_eq_trait_object_alloc {
 	(($($generics:tt)*) ($($path:tt)*) ($($bound:tt)*)) => {
 		impl<'eq, $($generics)*> ::core::cmp::PartialEq<&Self> for $crate::Box<dyn $($path)* + 'eq> where $($bound)* {
@@ -149,9 +145,10 @@ macro_rules! __internal_eq_trait_object_alloc {
 	}
 }
 
+/// When the `alloc` feature is disabled we don't do anything.
+#[cfg(not(feature = "alloc"))]
 #[doc(hidden)]
 #[macro_export]
-#[cfg(not(feature = "alloc"))]
 macro_rules! __internal_eq_trait_object_alloc {
 	(($($generics:tt)*) ($($path:tt)*) ($($bound:tt)*)) => {};
 }

@@ -72,7 +72,6 @@
 extern crate alloc;
 
 /// Re-export of [`alloc::boxed::Box`] for the macro.
-///
 #[cfg(feature = "alloc")]
 #[doc(hidden)]
 pub use alloc::boxed::Box;
@@ -81,8 +80,6 @@ use core::any::Any;
 mod macros;
 
 /// This trait is implemented by any type that implements [`Eq`].
-///
-/// [`Eq`]: ::core::cmp::PartialEq
 pub trait DynEq: Any + private::Sealed {
 	/// Upcast this reference to a `&dyn Any`, which can then be passed to [`dyn_eq`](DynEq::dyn_eq).
 	#[doc(hidden)]
