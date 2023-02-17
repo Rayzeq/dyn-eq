@@ -13,31 +13,10 @@
 
 /// Implement [`PartialEq`] and [`Eq`] for a trait object that has [`DynEq`] as a supertrait.
 ///
-/// ```
-/// use dyn_eq::DynEq;
+/// # Examples
 ///
-/// trait MyTrait: DynEq {
-///     /* ... */
-/// }
-///
-/// dyn_eq::eq_trait_object!(MyTrait);
-///
-/// #[derive(PartialEq, Eq)]
-/// struct MyEq {}
-///
-/// impl MyTrait for MyEq {
-///     /* ... */
-/// }
-///
-/// // Now data structures containing Box<dyn MyTrait> can derive Eq.
-/// # #[cfg(feature = "alloc")]
-/// #[derive(PartialEq, Eq)]
-/// struct Container {
-///     trait_object: Box<dyn MyTrait>,
-/// }
-/// ```
-///
-/// The macro supports traits that have type parameters and/or where clauses.
+/// See the [crate's documentation](https://docs.rs/dyn-eq/latest/dyn_eq/#example) for a basic example. \
+/// The macro also supports traits that have type parameters and/or where clauses.
 ///
 /// ```
 /// use dyn_eq::DynEq;
@@ -112,16 +91,24 @@ macro_rules! __internal_eq_trait_object {
 	// The impl.
 	(impl ($($generics:tt)*) ($($path:tt)*) ($($bound:tt)*)) => {
 		impl<'eq, $($generics)*> ::core::cmp::PartialEq for (dyn $($path)* + 'eq) where $($bound)* {
-			$crate::__internal_eq_trait_object!(func ($($path)*));
+			fn eq(&self, other: &Self) -> bool {
+				self.dyn_eq(other.as_any())
+			}
 		}
 		impl<'eq, $($generics)*> ::core::cmp::PartialEq for (dyn $($path)* + ::core::marker::Send + 'eq) where $($bound)* {
-			$crate::__internal_eq_trait_object!(func ($($path)*));
+			fn eq(&self, other: &Self) -> bool {
+				self.dyn_eq(other.as_any())
+			}
 		}
 		impl<'eq, $($generics)*> ::core::cmp::PartialEq for (dyn $($path)* + ::core::marker::Sync + 'eq) where $($bound)* {
-			$crate::__internal_eq_trait_object!(func ($($path)*));
+			fn eq(&self, other: &Self) -> bool {
+				self.dyn_eq(other.as_any())
+			}
 		}
 		impl<'eq, $($generics)*> ::core::cmp::PartialEq for (dyn $($path)* + ::core::marker::Send + ::core::marker::Sync + 'eq) where $($bound)* {
-			$crate::__internal_eq_trait_object!(func ($($path)*));
+			fn eq(&self, other: &Self) -> bool {
+				self.dyn_eq(other.as_any())
+			}
 		}
 
 		// Needed because of [this issue](https://github.com/rust-lang/rust/issues/31740)
@@ -155,15 +142,4 @@ macro_rules! __internal_eq_trait_object {
 		impl<'eq, $($generics)*> ::core::cmp::Eq for (dyn $($path)* + ::core::marker::Sync + 'eq) where $($bound)* {}
 		impl<'eq, $($generics)*> ::core::cmp::Eq for (dyn $($path)* + ::core::marker::Send + ::core::marker::Sync + 'eq) where $($bound)* {}
 	};
-
-	// The implementation of the `eq` function.
-	(func ($($path:tt)*)) => {
-		fn eq(&self, other: &Self) -> bool {
-			if self.type_id() == other.type_id() {
-				unsafe { self.dyn_eq(other as *const _ as *const ()) }
-			} else {
-				false
-			}
-		}
-	}
 }
