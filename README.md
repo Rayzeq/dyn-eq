@@ -12,7 +12,7 @@ Test equality between trait objects
 [crates.io]: https://img.shields.io/crates/v/dyn-eq?style=flat-square&logo=rust
 [doc.rs]: https://img.shields.io/badge/docs.rs-dyn--eq-a?style=flat-square&logo=docs.rs
 [license]: https://img.shields.io/crates/l/dyn-eq?style=flat-square
-[build]: https://img.shields.io/github/actions/workflow/status/Rayzeq/dyn-eq/rust.yml?style=flat-square
+[build]: https://img.shields.io/github/actions/workflow/status/Rayzeq/dyn-eq/ci.yml?style=flat-square
 [passively-maintained]: https://img.shields.io/badge/maintenance-passively--maintained-brightgreen?style=flat-square
 
 This crate provides a `DynEq` trait which permit comparing trait objects.
