@@ -30,6 +30,7 @@
 /// }
 ///
 /// // Now data structures containing Box<dyn MyTrait> can derive Eq.
+/// # #[cfg(feature = "alloc")]
 /// #[derive(PartialEq, Eq)]
 /// struct Container {
 ///     trait_object: Box<dyn MyTrait>,
@@ -124,21 +125,25 @@ macro_rules! __internal_eq_trait_object {
 		}
 
 		// Needed because of [this issue](https://github.com/rust-lang/rust/issues/31740)
+		#[cfg(feature = "alloc")]
 		impl<'eq, $($generics)*> ::core::cmp::PartialEq<&Self> for $crate::Box<dyn $($path)* + 'eq> where $($bound)* {
 			fn eq(&self, other: &&Self) -> bool {
 				self == *other
 			}
 		}
+		#[cfg(feature = "alloc")]
 		impl<'eq, $($generics)*> ::core::cmp::PartialEq<&Self> for $crate::Box<dyn $($path)* + ::core::marker::Send + 'eq> where $($bound)* {
 			fn eq(&self, other: &&Self) -> bool {
 				self == *other
 			}
 		}
+		#[cfg(feature = "alloc")]
 		impl<'eq, $($generics)*> ::core::cmp::PartialEq<&Self> for $crate::Box<dyn $($path)* + ::core::marker::Sync + 'eq> where $($bound)* {
 			fn eq(&self, other: &&Self) -> bool {
 				self == *other
 			}
 		}
+		#[cfg(feature = "alloc")]
 		impl<'eq, $($generics)*> ::core::cmp::PartialEq<&Self> for $crate::Box<dyn $($path)* + ::core::marker::Send + ::core::marker::Sync + 'eq> where $($bound)* {
 			fn eq(&self, other: &&Self) -> bool {
 				self == *other

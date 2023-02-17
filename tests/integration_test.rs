@@ -9,6 +9,7 @@ trait MyTrait: DynEq {}
 dyn_eq::eq_trait_object!(MyTrait);
 
 // This works
+#[cfg(feature = "alloc")]
 #[derive(PartialEq, Eq)]
 struct Container {
 	field: Box<dyn MyTrait>,
@@ -26,6 +27,7 @@ struct B {
 }
 impl MyTrait for B {}
 
+#[cfg(feature = "alloc")]
 mod with_box {
 	use super::*;
 

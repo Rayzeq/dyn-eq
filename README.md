@@ -17,7 +17,7 @@ of the same struct, the struct's `Eq` will be used.
 
 Here's a list of things that could be done and could be nice to have, but I'll implement them only if someone ask:
   - [ ] Permit having `PartialEq` without `Eq` (implementation on `Box<dyn Trait>` will follow)
-  - [ ] Implement this for `&dyn Trait` (permit no-alloc feature)
+  - [x] Implement this for `&dyn Trait` (permit no-alloc feature)
 
 ## Example
 

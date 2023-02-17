@@ -8,6 +8,12 @@
 //! different structs, they will always be not equal. If they are instances
 //! of the same struct, the struct's [`Eq`] will be used.
 //!
+//! # Features
+//!
+//! This crate has one feature: `alloc`, which is enabled by default. Disabling
+//! this feature removes the dependency on the [`alloc`] crate, but you won't be
+//! able to use [`DynEq`] for `Box<dyn Trait>`.
+//!
 //! # Example
 //!
 //! ```
@@ -37,10 +43,12 @@
 //! ```
 #![no_std]
 
+#[cfg(feature = "alloc")]
 extern crate alloc;
 
 /// Re-export of [`alloc::boxed::Box`] for the macro.
 ///
+#[cfg(feature = "alloc")]
 pub use alloc::boxed::Box;
 use core::any::Any;
 
