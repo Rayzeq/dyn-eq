@@ -88,22 +88,22 @@ macro_rules! __internal_eq_trait_object {
 	(impl ($($generics:tt)*) ($($path:tt)*) ($($bound:tt)*)) => {
 		impl<'eq, $($generics)*> ::core::cmp::PartialEq for (dyn $($path)* + 'eq) where $($bound)* {
 			fn eq(&self, other: &Self) -> bool {
-				self.dyn_eq(other.as_any())
+				self.dyn_eq(DynEq::as_any(other))
 			}
 		}
 		impl<'eq, $($generics)*> ::core::cmp::PartialEq for (dyn $($path)* + ::core::marker::Send + 'eq) where $($bound)* {
 			fn eq(&self, other: &Self) -> bool {
-				self.dyn_eq(other.as_any())
+				self.dyn_eq(DynEq::as_any(other))
 			}
 		}
 		impl<'eq, $($generics)*> ::core::cmp::PartialEq for (dyn $($path)* + ::core::marker::Sync + 'eq) where $($bound)* {
 			fn eq(&self, other: &Self) -> bool {
-				self.dyn_eq(other.as_any())
+				self.dyn_eq(DynEq::as_any(other))
 			}
 		}
 		impl<'eq, $($generics)*> ::core::cmp::PartialEq for (dyn $($path)* + ::core::marker::Send + ::core::marker::Sync + 'eq) where $($bound)* {
 			fn eq(&self, other: &Self) -> bool {
-				self.dyn_eq(other.as_any())
+				self.dyn_eq(DynEq::as_any(other))
 			}
 		}
 
